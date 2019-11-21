@@ -44,6 +44,7 @@
             border: 1px solid rgba(0, 0, 0, 0.2);
             border-radius: 4px;
             box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+            display: none;
         }
 
         li:hover {
@@ -65,12 +66,11 @@
             border: 1px solid black;
             border-radius: 5px;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            align-items: left;
             flex-direction: column;
-            text-align: center;
             margin: 10px;
         }
+
     </style>
 
     <div class="container">
@@ -79,11 +79,78 @@
             <input type="text">
             <ul id="list"></ul>
         </div>
+            <div class="card-container">
+            <ul class="bigList">
+                <li>ds</li>
+            </ul>
+        </div>
     </div>
 
 </body>
 
 <script>
+    let characters = []
+    let list = document.getElementById("list")
+    let search = document.querySelector("input")
+    let bigList = document.getElementsByClassName("bigList")
+    let html = ""
+    
+
+    fetch('https://www.swapi.co/api/people')
+    .then(response => response.json())
+    .then(response => characters.push(...response.results))
+
+    function render(array){
+        let html = array.join("")
+        list.innerHTML = html
+        
+    }
+
+
+function filterText() {
+    let filtered = characters.filter(function(val){
+        return val.name.toLowerCase().includes(search.value.toLowerCase())
+        })
+    
+    filtered = filtered.map(function(val){
+        return `<li>${val.name}</li>`
+    })
+
+    if (filtered.length > 0) {
+        render(filtered)
+    }
+}
+
+function displayList(){
+    arrayOfNames = []
+
+
+    if(search.value === ""){
+        list.style.display = "none"
+    } else {
+        list.style.display = "block"
+    }
+
+    for(i = 0; i < characters.length; i++){
+        arrayOfNames.push(characters[i].name)
+    }
+    
+    for(i = 0; i < characters.length; i++){
+        arrayOfNames.push(characters[i].name)
+    }
+    var names = arrayOfNames.join(" ")
+
+    if (!(names.toLowerCase().includes(search.value.toLowerCase()))){
+        list.innerHTML = "No Results"
+    }
+
+}
+
+
+search.addEventListener('keyup', filterText)
+
+search.addEventListener("keyup", displayList)
+
 </script>
 
 </html>
